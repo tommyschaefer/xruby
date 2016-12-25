@@ -56,54 +56,53 @@ class AllYourBaseCase < OpenStruct
 end
 
 class AllYourBaseCase::PreProcessor
-  def initialize(row:, index:)
-    @row = row
-    @index = index
-  end
+  class << self
+    def call(row:)
+      @row = row
 
-  def run
-    row.merge('expected' => expected_value, 'index' => index)
-  end
-
-  private
-
-  attr_reader :row, :index
-
-  def expected_value
-    return row['expected'] if row['expected']
-
-    if invalid_input_digits? || invalid_bases?
-      nil
-    elsif row['input_digits'].empty?
-      []
-    elsif input_of_zero?
-      [0]
-    else
-      handle_special_cases
+      row.merge('expected' => expected_value)
     end
-  end
 
-  def invalid_input_digits?
-    row['input_digits'].any? { |x| x < 0 || x >= row['input_base'] }
-  end
+    private
 
-  def invalid_bases?
-    row['input_base'] <= 1 || row['output_base'] <= 1
-  end
+    attr_reader :row
 
-  def input_of_zero?
-    row['input_digits'].all? { |x| x == 0 }
-  end
+    def expected_value
+      return row['expected'] if row['expected']
 
-  def handle_special_cases
-    [4,2] if row['input_digits'] == [0, 6, 0]
+      if invalid_input_digits? || invalid_bases?
+        nil
+      elsif row['input_digits'].empty?
+        []
+      elsif input_of_zero?
+        [0]
+      else
+        handle_special_cases
+      end
+    end
+
+    def invalid_input_digits?
+      row['input_digits'].any? { |x| x < 0 || x >= row['input_base'] }
+    end
+
+    def invalid_bases?
+      row['input_base'] <= 1 || row['output_base'] <= 1
+    end
+
+    def input_of_zero?
+      row['input_digits'].all? { |x| x == 0 }
+    end
+
+    def handle_special_cases
+      [4,2] if row['input_digits'] == [0, 6, 0]
+    end
   end
 end
 
 AllYourBaseCases = proc do |data|
   JSON.parse(data)['cases'].map.with_index do |row, i|
     AllYourBaseCase.new(
-      AllYourBaseCase::PreProcessor.new(row: row, index: i).run
+      AllYourBaseCase::PreProcessor.call(row: row).merge(index: i),
     )
   end
 end
