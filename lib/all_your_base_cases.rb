@@ -20,9 +20,9 @@ class AllYourBaseCase < OpenStruct
   private
 
   def indent(size, lines)
-    lines.split("\n").map do |line|
-      ' ' * size + line
-    end.join("\n")
+    lines.lines.each_with_object('') do |obj, line|
+      ' ' * size + line + "\n"
+    end
   end
 
   def assertion
