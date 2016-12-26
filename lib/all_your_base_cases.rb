@@ -1,6 +1,6 @@
 class AllYourBaseCase < OpenStruct
   def test_name
-    'test_%s' % description.downcase.tr_s(' -', '_')
+    'test_%s' % description.downcase.tr(' -', '_')
   end
 
   def workload
