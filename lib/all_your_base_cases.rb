@@ -1,6 +1,6 @@
 class AllYourBaseCase < OpenStruct
   def test_name
-    'test_%s' % description.downcase.tr_s(' -', '_')
+    'test_%s' % description.downcase.tr(' -', '_')
   end
 
   def workload
@@ -20,9 +20,7 @@ class AllYourBaseCase < OpenStruct
   private
 
   def indent(size, lines)
-    lines.split("\n").map do |line|
-      ' ' * size + line
-    end.join("\n")
+    lines.lines.each_with_object('') { |line, obj| obj << ' ' * size + line }
   end
 
   def assertion
@@ -57,7 +55,7 @@ end
 
 class AllYourBaseCase::PreProcessor
   class << self
-    def call(row:)
+    def call(row)
       @row = row
 
       row.merge('expected' => expected_value)
@@ -102,7 +100,7 @@ end
 AllYourBaseCases = proc do |data|
   JSON.parse(data)['cases'].map.with_index do |row, i|
     AllYourBaseCase.new(
-      AllYourBaseCase::PreProcessor.call(row: row).merge(index: i),
+      AllYourBaseCase::PreProcessor.call(row).merge(index: i),
     )
   end
 end
