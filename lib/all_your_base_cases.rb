@@ -4,51 +4,55 @@ class AllYourBaseCase < OpenStruct
   end
 
   def workload
-    (
-      [
-        "digits = #{input_digits}",
-        indent(4, "input_base = #{input_base}"),
-        indent(4, "output_base = #{output_base}"),
-      ] + assertion
-    ).join("\n")
+    indent(4,(assignments + assertion).join("\n"))
   end
 
   def skipped
-    index.zero? ? '# skip' : 'skip'
+    indent(4, index.zero? ? '# skip' : 'skip') + "\n"
   end
 
   private
 
-  def indent(size, lines)
-    lines.lines.each_with_object('') { |line, obj| obj << ' ' * size + line }
+  def indent(size, text)
+    text.lines.each_with_object('') do |line, obj|
+      obj << (line.match(/^$/) ? line : ' ' * size + line)
+    end
+  end
+
+  def assignments
+    [
+      "digits = #{input_digits}",
+      "input_base = #{input_base}",
+      "output_base = #{output_base}"
+    ]
   end
 
   def assertion
     return error_assertion unless expected
 
     [
-      indent(4, "expected = #{expected}"),
+      "expected = #{expected}",
       "",
-      indent(4, "converted = BaseConverter.convert(input_base, digits, output_base)"),
+      "converted = BaseConverter.convert(input_base, digits, output_base)",
       "",
-      indent(4, "assert_equal expected, converted,"),
-      indent(17, error_message)
+      "assert_equal expected, converted,",
+      indent(13, error_message.join)
     ]
   end
 
   def error_message
     [
-      '"Input base: #{input_base}, output base #{output_base}. " \\',
-      '"Expected #{expected} but got #{converted}."',
-    ].join("\n")
+      %q("Input base: #{input_base}, output base #{output_base}. " \\) + "\n",
+      %q("Expected #{expected} but got #{converted}.") + "\n"
+    ]
   end
 
   def error_assertion
     [
       "",
-      indent(4, "assert_raises ArgumentError do"),
-      indent(6, "BaseConverter.convert(input_base, digits, output_base)"),
-      indent(4, "end"),
+      "assert_raises ArgumentError do",
+      "  BaseConverter.convert(input_base, digits, output_base)",
+      "end\n"
     ]
   end
 end
