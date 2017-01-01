@@ -24,6 +24,7 @@ namespace :test do
       FileUtils.cp_r "exercises/#{assignment}/.", out_dir
       FileUtils.mv "#{out_dir}/example.rb", "#{out_dir}/#{srcfile}.rb"
 
+      # TODO: Allow args to be passed to tests
       puts `ruby -I lib -r disable_skip.rb #{out_dir}/#{srcfile}_test.rb`
     end
   end
