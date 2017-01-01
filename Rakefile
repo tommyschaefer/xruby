@@ -1,5 +1,6 @@
 require 'rake'
 require 'rake/testtask'
+require 'tmpdir'
 
 desc 'rake with no argument will run "rake test:all"'
 task default: 'test:all'
