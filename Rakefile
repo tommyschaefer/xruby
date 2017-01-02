@@ -1,13 +1,13 @@
 require 'rake'
 require 'rake/testtask'
-require 'tmpdir'
 
-require_relative './lib/exercise_test_runner'
+require_relative 'lib/tasks/exercise_test_task'
 
 desc 'rake with no argument will run "rake test:all"'
 task default: 'test:all'
 
 namespace :test do
+  desc 'Run all development and exercise tests'
   task :all do
     Rake::Task['test:dev'].invoke
     Rake::Task['test:assignments'].invoke
@@ -17,16 +17,11 @@ namespace :test do
     task.pattern = 'test/*_test.rb'
   end
 
-  task :assignment, [:assignment] do |_, args|
-    runner = ExerciseTestRunner.new(
-      exercise: args[:assignment],
-      test_options: ENV['TESTOPTS'],
-    )
-
-    puts "\n\n#{'-'*64}\nrunning tests for: #{args[:assignment]}"
-    puts runner.run
+  ExerciseTestTask.new :assignment do |task|
+    task.description = "Run the tests for a specific exercise"
   end
 
+  desc 'Run the tests for all exercises'
   task :assignments do
     Dir.foreach('exercises').each do |assignment|
       next if %w(. ..).include?(assignment)
