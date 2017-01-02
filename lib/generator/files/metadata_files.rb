@@ -1,3 +1,5 @@
+require_relative '../files'
+
 module Generator
   module Files
     module MetadataFiles

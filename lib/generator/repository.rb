@@ -1,4 +1,5 @@
 require 'delegate'
+require_relative 'template_values'
 require_relative 'files/track_files'
 require_relative 'files/metadata_files'
 
