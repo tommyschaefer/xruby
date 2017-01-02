@@ -6,6 +6,10 @@ require_relative 'lib/tasks/exercise_test_task'
 desc 'rake with no argument will run "rake test:all"'
 task default: 'test:all'
 
+task :test do
+  Rake::Task['test:all'].invoke
+end
+
 namespace :test do
   desc 'Run all development and exercise tests'
   task :all do

@@ -34,28 +34,35 @@ suite, you can run the file with a shim that temporarily disables them:
 ruby -I./lib -rdisable_skip exercise/exercise/filename_test.rb
 ```
 
-It is simpler to use the `make` tool which is available in the project
+It is simpler to use the `rake` tool which is available in the project
 root.  It will disable the skip calls for you automatically, it does the
 same thing as the above.
 
-If you would like to use the `make` tool to run a single test, while
+If you would like to use the `rake` tool to run a single test, while
 developing clock, for example, you can do something like this:
 
 ```sh
-ASSIGNMENT=clock ARGS='-p' make test-assignment
+rake test:assignment[clock]
 ```
 
-Where, "ASSIGNMENT" is the variable that holds the name of the lesson,
-clock.
+```sh
+rake test:assignment\[clock] # for zsh users
+```
 
 ARGS is where you can put additional arguments, here I am demonstrating
 the `-p` argument which may give you 'pride' output.
+
+```sh
+TESTOPTS=-p rake test:assignment[clock]
+```
+
+And of course, for zsh the escape on the brackets are required.
 
 If you use zsh, you can use the following function to make this process
 simple.
 
 ```sh
-xtest () { ASSIGNMENT=$1 ARGS=$2 make test-assignment }
+xtest () { ASSIGNMENT=$1 TESTOPTS=$2 rake test:assignment\[$1] }
 ```
 
 Then you can simply use the command and exercise name, such as:
@@ -70,6 +77,21 @@ rather than just the dots, for example:
 Or with the pride reporter activated:
 
 `xtest robot-name -p`
+
+For example, on a zsh system, I just executed the following for
+beautiful results:
+
+```sh
+xtest series -p
+```
+
+To show an example for a limited number of tests, we will use "hamming"
+exercise, with a pattern of "identical" to run (currently) two tests:
+
+```sh
+xtest hamming '-p -n "/identical/"'
+```
+
 
 ### Generated Test Suites
 
