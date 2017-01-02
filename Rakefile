@@ -2,6 +2,8 @@ require 'rake'
 require 'rake/testtask'
 require 'tmpdir'
 
+require_relative './lib/exercise_test_runner'
+
 desc 'rake with no argument will run "rake test:all"'
 task default: 'test:all'
 
@@ -16,18 +18,13 @@ namespace :test do
   end
 
   task :assignment, [:assignment] do |_, args|
-    assignment = args[:assignment]
-    srcfile = assignment.tr('-', '_')
+    runner = ExerciseTestRunner.new(
+      exercise: args[:assignment],
+      test_options: ENV['TESTOPTS'],
+    )
 
-    puts "\n\n#{'-'*64}\nrunning tests for: #{assignment}"
-
-    Dir.mktmpdir(assignment) do |out_dir|
-      FileUtils.cp_r "exercises/#{assignment}/.", out_dir
-      FileUtils.mv "#{out_dir}/example.rb", "#{out_dir}/#{srcfile}.rb"
-
-      # TODO: Allow args to be passed to tests
-      puts `ruby -I lib -r disable_skip.rb #{out_dir}/#{srcfile}_test.rb`
-    end
+    puts "\n\n#{'-'*64}\nrunning tests for: #{args[:assignment]}"
+    puts runner.run
   end
 
   task :assignments do
