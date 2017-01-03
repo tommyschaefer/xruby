@@ -42,18 +42,18 @@ If you would like to use the `rake` tool to run a single test, while
 developing clock, for example, you can do something like this:
 
 ```sh
-rake test:assignment[clock]
+rake test:exercise[clock]
 ```
 
 ```sh
-rake test:assignment\[clock] # for zsh users
+rake test:exercise\[clock] # for zsh users
 ```
 
 ARGS is where you can put additional arguments, here I am demonstrating
 the `-p` argument which may give you 'pride' output.
 
 ```sh
-TESTOPTS=-p rake test:assignment[clock]
+rake test:exercise[clock] -- -p
 ```
 
 And of course, for zsh the escape on the brackets are required.
@@ -62,7 +62,7 @@ If you use zsh, you can use the following function to make this process
 simple.
 
 ```sh
-xtest () { ASSIGNMENT=$1 TESTOPTS=$2 rake test:assignment\[$1] }
+xtest () { rake test:exercise\[$1] -- $2 }
 ```
 
 Then you can simply use the command and exercise name, such as:
