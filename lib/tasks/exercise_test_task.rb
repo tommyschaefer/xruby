@@ -41,6 +41,10 @@ class ExerciseTestTask < Rake::TaskLib
   end
 
   def run_exercise_tests_in(dir)
-    ruby "-I lib -r disable_skip.rb #{dir}/#{srcfile}_test.rb #{ENV['TESTOPTS']}"
+    ruby "-I lib -r disable_skip.rb #{dir}/#{srcfile}_test.rb #{test_options}"
+  end
+
+  def test_options
+    ARGV[ARGV.index('--')+1..-1].join(' ')
   end
 end
