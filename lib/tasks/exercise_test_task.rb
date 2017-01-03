@@ -15,8 +15,8 @@ class ExerciseTestTask < Rake::TaskLib
 
   def define
     desc description
-    task name, [:assignment] do |_, args|
-      @exercise = args[:assignment]
+    task name, [:exercise] do |_, args|
+      @exercise = args[:exercise]
 
       puts "\n\n#{'-'*64}\nrunning tests for: #{exercise}"
 
@@ -45,6 +45,8 @@ class ExerciseTestTask < Rake::TaskLib
   end
 
   def test_options
+    return '' unless ARGV.include?('--')
+
     ARGV[ARGV.index('--')+1..-1].join(' ')
   end
 end

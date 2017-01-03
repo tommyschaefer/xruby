@@ -14,23 +14,23 @@ namespace :test do
   desc 'Run all development and exercise tests'
   task :all do
     Rake::Task['test:dev'].invoke
-    Rake::Task['test:assignments'].invoke
+    Rake::Task['test:exercises'].invoke
   end
 
   Rake::TestTask.new :dev do |task|
     task.pattern = 'test/**/*_test.rb'
   end
 
-  ExerciseTestTask.new :assignment do |task|
+  ExerciseTestTask.new :exercise do |task|
     task.description = "Run the tests for a specific exercise"
   end
 
   desc 'Run the tests for all exercises'
-  task :assignments do
-    Dir.foreach('exercises').each do |assignment|
-      next if %w(. ..).include?(assignment)
+  task :exercises do
+    Dir.foreach('exercises').each do |exercise|
+      next if %w(. ..).include?(exercise)
 
-      Rake::Task['test:assignment'].execute(assignment: assignment)
+      Rake::Task['test:exercise'].execute(exercise: exercise)
     end
   end
 end
