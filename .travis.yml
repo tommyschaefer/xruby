@@ -8,7 +8,7 @@ install:
 script:
   - rubocop -fs -D
   - bin/executable-tests-check
-  - rake test:all
+  - rake test
   - make test
   - bin/fetch-configlet
   - bin/configlet .

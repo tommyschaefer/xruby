@@ -4,7 +4,7 @@ require 'rake/testtask'
 require_relative 'lib/tasks/exercise_test_task'
 
 desc 'rake with no argument will run "rake test:all"'
-task default: 'test:all'
+task default: 'test'
 
 task :test do
   Rake::Task['test:all'].invoke
