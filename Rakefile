@@ -1,13 +1,14 @@
 require 'rake'
 require 'rake/testtask'
 
+require_relative 'lib/rake_helper'
 require_relative 'lib/tasks/exercise_test_task'
 
 task default: 'test'
 
 desc 'Run all development and exercise tests'
 task :test do
-  exercises = ARGV.take_while { |e| e != '--' }.drop(1)
+  exercises = Rake.arguments
 
   if exercises.any?
     exercises.each do |e|
