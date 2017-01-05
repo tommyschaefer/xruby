@@ -47,6 +47,6 @@ class ExerciseTestTask < Rake::TaskLib
   def test_options
     return '' unless ARGV.include?('--')
 
-    ARGV[ARGV.index('--')+1..-1].join(' ')
+    ARGV.drop_while { |e| e != '--' }.drop(1).join(' ')
   end
 end

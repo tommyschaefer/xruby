@@ -3,20 +3,24 @@ require 'rake/testtask'
 
 require_relative 'lib/tasks/exercise_test_task'
 
-desc 'rake with no argument will run "rake test:all"'
 task default: 'test'
 
+desc 'Run all development and exercise tests'
 task :test do
-  Rake::Task['test:all'].invoke
-end
+  exercises = ARGV.take_while { |e| e != '--' }.drop(1)
 
-namespace :test do
-  desc 'Run all development and exercise tests'
-  task :all do
+  if exercises.any?
+    exercises.each do |e|
+      task(e) { Rake::Task['test:exercise'].execute(exercise: e) }
+    end
+  else
     Rake::Task['test:dev'].invoke
     Rake::Task['test:exercises'].invoke
   end
+end
 
+namespace :test do
+  desc 'Run all development tests located in the test directory'
   Rake::TestTask.new :dev do |task|
     task.pattern = 'test/**/*_test.rb'
   end
